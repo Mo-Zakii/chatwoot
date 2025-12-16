@@ -1,0 +1,15 @@
+# Lightweight wrapper to apply BAITK branding on Chatwoot
+FROM chatwoot/chatwoot:latest
+
+USER root
+WORKDIR /app
+
+# Copy BAITK branding files (these override at runtime)
+COPY config/installation_config.yml config/installation_config.yml
+COPY public/brand-assets/logo.svg public/brand-assets/logo.svg
+COPY public/brand-assets/logo_dark.svg public/brand-assets/logo_dark.svg
+COPY public/brand-assets/logo_thumbnail.svg public/brand-assets/logo_thumbnail.svg
+COPY app/javascript/dashboard/i18n/locale/en/login.json app/javascript/dashboard/i18n/locale/en/login.json
+
+# Reset to app user
+USER chatwoot
