@@ -11,5 +11,17 @@ COPY public/brand-assets/logo_dark.svg public/brand-assets/logo_dark.svg
 COPY public/brand-assets/logo_thumbnail.svg public/brand-assets/logo_thumbnail.svg
 COPY app/javascript/dashboard/i18n/locale/en/login.json app/javascript/dashboard/i18n/locale/en/login.json
 
-# Reset to app user
-USER chatwoot
+# Install minimal build deps for JS install/precompile
+RUN apk add --no-cache python3 make g++ nodejs npm
+
+# Install pnpm to match upstream build tooling
+RUN npm install -g pnpm@10.2.0
+
+# Reduce build overhead during pnpm hooks and give Vite more heap
+ENV HUSKY=0
+ENV NODE_OPTIONS="--max-old-space-size=3072"
+
+# Install JS deps and re-precompile assets so BAITK branding is baked in
+RUN pnpm install --frozen-lockfile \
+	&& RAILS_ENV=production SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled bundle exec rake assets:precompile \
+	&& rm -rf node_modules tmp/cache log

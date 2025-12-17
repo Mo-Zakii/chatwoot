@@ -22,6 +22,11 @@ ENV RAILS_ENV ${RAILS_ENV}
 ARG NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
 ENV NODE_OPTIONS ${NODE_OPTIONS}
 
+# Reduce parallelism to keep memory in check during native gem builds
+ENV MAKEFLAGS="-j1"
+ENV BUNDLE_JOBS=2
+ENV BUNDLE_RETRY=3
+
 ENV BUNDLE_PATH="/gems"
 
 RUN apk update && apk add --no-cache \
