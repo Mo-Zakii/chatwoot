@@ -14,7 +14,7 @@ module ChatwootApp
   def self.enterprise?
     return if ENV.fetch('DISABLE_ENTERPRISE', false)
 
-    true
+    @enterprise ||= root.join('enterprise').exist?
   end
 
   def self.chatwoot_cloud?
