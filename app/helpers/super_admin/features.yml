@@ -8,7 +8,7 @@ captain:
   enabled: <%= (ChatwootHub.pricing_plan != 'community') %>
   icon: 'icon-captain'
   config_key: 'captain'
-  enterprise: true
+  #enterprise: true
 saml:
   name: 'SAML SSO'
   description: 'Configuration for controlling SAML Single Sign-On availability'
