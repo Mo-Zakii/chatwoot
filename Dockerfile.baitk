@@ -10,6 +10,13 @@ COPY public/brand-assets/logo.svg public/brand-assets/logo.svg
 COPY public/brand-assets/logo_dark.svg public/brand-assets/logo_dark.svg
 COPY public/brand-assets/logo_thumbnail.svg public/brand-assets/logo_thumbnail.svg
 COPY app/javascript/dashboard/i18n/locale/en/login.json app/javascript/dashboard/i18n/locale/en/login.json
+COPY app/helpers/super_admin/features.yml app/helpers/super_admin/features.yml
+COPY lib/chatwoot_app.rb lib/chatwoot_app.rb
+COPY app/models/concerns/featurable.rb app/models/concerns/featurable.rb
+COPY app/javascript/dashboard/routes/index.js app/javascript/dashboard/routes/index.js
+COPY app/views/layouts/vueapp.html.erb app/views/layouts/vueapp.html.erb
+COPY app/views/layouts/super_admin/application.html.erb app/views/layouts/super_admin/application.html.erb
+COPY public/manifest.json public/manifest.json
 
 # Install minimal build deps for JS install/precompile
 RUN apk add --no-cache python3 make g++ nodejs npm
@@ -22,6 +29,8 @@ ENV HUSKY=0
 ENV NODE_OPTIONS="--max-old-space-size=3072"
 
 # Install JS deps and re-precompile assets so BAITK branding is baked in
-RUN pnpm install --frozen-lockfile \
-	&& RAILS_ENV=production SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled bundle exec rake assets:precompile \
+RUN rm -f public/favicon.ico public/apple-touch-icon.png public/apple-icon-*.png public/favicon-*.png \
+    && cp public/brand-assets/logo_thumbnail.svg public/favicon.svg \
+    && pnpm install --frozen-lockfile \
+	&& RAILS_ENV=production SECRET_KEY_BASE=precompile_placeholder RAILS_LOG_TO_STDOUT=enabled bundle exec rake assets:clobber assets:precompile \
 	&& rm -rf node_modules tmp/cache log
