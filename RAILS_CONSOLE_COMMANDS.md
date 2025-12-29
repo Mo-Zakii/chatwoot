@@ -18,18 +18,24 @@ account.enable_features!('captain', 'saml', 'custom_branding', 'agent_capacity',
 # Access Rails console through Coolify
 bundle exec rails console
 
-# Enable features
+# Enable all enterprise features at once
 account = Account.find(1)
-account.enable_features!('captain', 'saml', 'custom_branding', 'agent_capacity', 'audit_logs', 'disable_branding')
+account.enable_features!('captain_integration', 'saml', 'disable_branding', 'audit_logs', 'sla', 'custom_roles', 'companies')
+
+# Verify features
+account.all_features
 ```
 
-## List of Enterprise Features
-- `captain` - AI-powered conversations
-- `saml` - SAML SSO
-- `custom_branding` - Custom branding options
-- `agent_capacity` - Agent capacity management
-- `audit_logs` - Audit logging
-- `disable_branding` - Remove "Powered by Chatwoot"
+## List of Enterprise Features (Correct Names)
+- `captain_integration` - AI-powered Captain (premium)
+- `saml` - SAML SSO (premium)
+- `disable_branding` - Remove "Powered by Chatwoot" (premium)
+- `audit_logs` - Audit logging (premium)
+- `sla` - SLA management (premium)
+- `custom_roles` - Custom role management (premium)
+- `companies` - Companies feature (premium)
+- `advanced_search` - Advanced search (premium, internal)
+- `channel_voice` - Voice channel (premium)
 
 ## Check Current Features
 ```ruby
